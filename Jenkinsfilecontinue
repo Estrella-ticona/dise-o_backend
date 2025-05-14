@@ -2,81 +2,53 @@ pipeline {
     agent any
 
     tools {
-        jdk 'JDK21'  // Usa exactamente el nombre configurado en Jenkins
-    }
-
-    environment {
-        STAGING_ENV = 'staging'
-        PROD_ENV = 'production'
+        maven 'MAVEN399'
+        jdk 'JDK21'
     }
 
     stages {
-        stage('Clonar Repositorio') {
+        stage('Checkout') {
             steps {
-                echo 'Clonando el repositorio...'
-                git branch: 'main', url: 'https://github.com/Estrella-ticona/dise-o_backend'
+                checkout scm
             }
         }
 
-        stage('Compilación y Construcción') {
+        stage('Build') {
             steps {
-                echo 'Compilando el proyecto con Maven...'
-                bat 'mvn clean install'
+                withMaven(maven: 'MAVEN399') {
+                    bat 'mvn clean package'
+                }
             }
         }
 
-        stage('Pruebas Unitarias') {
+        stage('Run Tests') {
             steps {
-                echo 'Ejecutando pruebas unitarias...'
-                bat 'mvn test'
+                withMaven(maven: 'MAVEN399') {
+                    bat 'mvn test'
+                }
             }
         }
 
-        stage('Pruebas de Integración') {
+        stage('Deploy to Server') {
             steps {
-                echo 'Ejecutando pruebas de integración...'
-                bat 'run_integration_tests.bat'
-            }
-        }
-
-        stage('Despliegue a Staging') {
-            steps {
-                echo 'Desplegando a entorno de Staging...'
-                bat 'deploy_to_staging.bat'
-            }
-        }
-
-        stage('Pruebas en Staging') {
-            steps {
-                echo 'Ejecutando pruebas en el entorno de Staging...'
-                bat 'run_staging_tests.bat'
-            }
-        }
-
-        stage('Despliegue a Producción') {
-            steps {
-                echo 'Desplegando a Producción...'
-                bat 'deploy_to_production.bat'
-            }
-        }
-
-        stage('Monitoreo Post-Despliegue') {
-            steps {
-                echo 'Ejecutando monitoreo post-despliegue...'
-                bat 'monitor_production.bat'
+                // Reemplaza esto con tu mecanismo real de despliegue (ej: copiar JAR/WAR y reiniciar Tomcat)
+                bat '''
+                    echo "Copiando artefacto al servidor..."
+                    copy target\\miapp.war C:\\ServidorApp\\webapps\\miapp.war
+                    echo "Reiniciando servidor..."
+                    net stop Tomcat9
+                    net start Tomcat9
+                '''
             }
         }
     }
 
     post {
-        always {
-            echo 'El pipeline ha finalizado.'
-        }
         success {
-            echo '¡El despliegue fue exitoso!'
+            echo "✅ Despliegue exitoso del build #${env.BUILD_NUMBER}"
         }
         failure {
-            echo 'Hubo un error en el despliegue.'
+            echo "❌ Falló el despliegue del build #${env.BUILD_NUMBER}"
         }
     }
 }

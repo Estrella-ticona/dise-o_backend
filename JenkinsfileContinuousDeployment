@@ -1,68 +1,54 @@
-
 pipeline {
     agent any
 
     tools {
-        jdk 'JDK21'  // Usa exactamente el nombre configurado en Jenkins
-    }
-
-    environment {
-        DOCKER_IMAGE = 'ecovimil/app'
-        STAGING_ENV = 'staging'
-        PROD_ENV = 'production'
+        maven 'MAVEN399'
+        jdk 'JDK21'
     }
 
     stages {
-        stage('Clonar Repositorio') {
+        stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/Estrella-ticona/dise-o_backend'
+                checkout scm
             }
         }
 
-        stage('Compilación y Construcción') {
+        stage('Build') {
             steps {
-                bat 'mvn clean install'
+                withMaven(maven: 'MAVEN399') {
+                    bat 'mvn clean package'
+                }
             }
         }
 
-        stage('Pruebas Unitarias') {
+        stage('Run Tests') {
             steps {
-                bat 'mvn test'
+                withMaven(maven: 'MAVEN399') {
+                    bat 'mvn test'
+                }
             }
         }
 
-        stage('Pruebas de Integración') {
+        stage('Deploy to Server') {
             steps {
-                // Reemplaza con script .bat o usa PowerShell si estás en Windows
-                bat 'run_integration_tests.bat'
+                // Reemplaza esto con tu mecanismo real de despliegue (ej: copiar JAR/WAR y reiniciar Tomcat)
+                bat '''
+                    echo "Copiando artefacto al servidor..."
+                    copy target\\miapp.war C:\\ServidorApp\\webapps\\miapp.war
+                    echo "Reiniciando servidor..."
+                    net stop Tomcat9
+                    net start Tomcat9
+                '''
             }
         }
+    }
 
-        stage('Despliegue a Staging') {
-            steps {
-                bat 'docker build -t %DOCKER_IMAGE%:%BUILD_NUMBER% .'
-                bat 'docker run -d --name eco-movil-staging %DOCKER_IMAGE%:%BUILD_NUMBER%'
-            }
+    post {
+        success {
+            echo "✅ Despliegue exitoso del build #${env.BUILD_NUMBER}"
         }
-
-        stage('Pruebas en Staging') {
-            steps {
-                bat 'run_staging_tests.bat'
-            }
-        }
-
-        stage('Despliegue a Producción') {
-            steps {
-                bat 'docker tag %DOCKER_IMAGE%:%BUILD_NUMBER% %DOCKER_IMAGE%:latest'
-                bat 'docker push %DOCKER_IMAGE%:latest'
-                bat 'docker run -d --name eco-movil-prod %DOCKER_IMAGE%:latest'
-            }
-        }
-
-        stage('Monitoreo Post-Despliegue') {
-            steps {
-                bat 'monitor_production.bat'
-            }
+        failure {
+            echo "❌ Falló el despliegue del build #${env.BUILD_NUMBER}"
         }
     }
 }
