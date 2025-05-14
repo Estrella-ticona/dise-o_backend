@@ -1,5 +1,7 @@
-import static org.junit.Assert.assertEquals;
-import org.junit.Test;
+package upc.edu.ecomovil.api;
+
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import upc.edu.ecomovil.api.iam.domain.model.aggregates.User;
 import upc.edu.ecomovil.api.user.domain.model.aggregates.Profile;
@@ -15,8 +17,8 @@ public class ProfileTest {
         profile.updateEmail("juan_perez1998@hotmail.com");
 
         // Assert
-        assertEquals("El correo electronico se actualizó correctamente", "juan_perez1998@hotmail.com",
-                profile.getEmail());
+        assertEquals("juan_perez1998@hotmail.com", profile.getEmail(),
+                "El correo electronico se actualizó correctamente");
 
     }
 
@@ -30,7 +32,7 @@ public class ProfileTest {
         profile.updateName("Oscar", "Gonzales");
 
         // Assert
-        assertEquals("El nombre se actualizó correctamente", "Oscar Gonzales", profile.getFullName());
+        assertEquals("Oscar Gonzales", profile.getFullName(), "El nombre se actualizó correctamente");
 
     }
 }

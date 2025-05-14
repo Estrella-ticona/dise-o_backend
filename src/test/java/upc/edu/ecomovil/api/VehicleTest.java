@@ -1,6 +1,7 @@
+package upc.edu.ecomovil.api;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import upc.edu.ecomovil.api.vehicles.domain.model.aggregates.Vehicle;
 
@@ -26,9 +27,9 @@ public class VehicleTest {
                 vehicle.updateDetails("Honda", "Civic", 2021);
 
                 // Assert
-                Assert.assertEquals("El fabricante se actualizó correctamente", "Honda", vehicle.getType());
-                Assert.assertEquals("El nombre se actualizó correctamente", "Civic", vehicle.getName());
-                Assert.assertEquals("El año se actualizó correctamente", Integer.valueOf(2021), vehicle.getYear());
+                assertEquals("Honda", vehicle.getType(), "El fabricante se actualizó correctamente");
+                assertEquals("Civic", vehicle.getName(), "El nombre se actualizó correctamente");
+                assertEquals(Integer.valueOf(2021), vehicle.getYear(), "El año se actualizó correctamente");
 
         }
 
@@ -53,10 +54,10 @@ public class VehicleTest {
                 vehicle.updatePrices(200.0, 30000.0);
 
                 // Assert
-                Assert.assertEquals("El precio de renta se actualizó correctamente", Double.valueOf(200.0),
-                                vehicle.getPriceRent());
-                Assert.assertEquals("El precio de venta se actualizó correctamente", Double.valueOf(30000.0),
-                                vehicle.getPriceSell());
+                assertEquals(Double.valueOf(200.0),
+                                vehicle.getPriceRent(), "El precio de renta se actualizó correctamente");
+                assertEquals(Double.valueOf(30000.0),
+                                vehicle.getPriceSell(), "El precio de venta se actualizó correctamente");
         }
 
 }

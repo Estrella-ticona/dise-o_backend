@@ -1,5 +1,7 @@
-import org.junit.Assert;
-import org.junit.Test;
+package upc.edu.ecomovil.api;
+
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import upc.edu.ecomovil.api.iam.domain.model.aggregates.User;
 import upc.edu.ecomovil.api.reservations.domain.model.aggregates.Reservation;
@@ -35,8 +37,8 @@ public class ReservationTest {
         reservation.updateStatus("Reservado");
 
         // Assert
-        Assert.assertEquals("El estado de la reserva se actualizó correctamente", "Reservado",
-                reservation.getStatus());
+        assertEquals("Reservado",
+                reservation.getStatus(), "El estado de la reserva se actualizó correctamente");
 
     }
 

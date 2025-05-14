@@ -1,8 +1,7 @@
+package upc.edu.ecomovil.api;
 
-import static org.junit.Assert.assertEquals;
-
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import upc.edu.ecomovil.api.iam.domain.model.aggregates.User;
 
@@ -16,7 +15,7 @@ public class UserTest {
         user.setUsername("juan1234");
 
         // Assert
-        assertEquals("El nombre de usuario se actualizó correctamente", "juan1234", user.getUsername());
+        assertEquals("juan1234", user.getUsername(), "El nombre de usuario se actualizó correctamente");
     }
 
 }

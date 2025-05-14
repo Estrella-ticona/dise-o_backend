@@ -1,5 +1,7 @@
-import org.junit.Test;
-import static org.junit.Assert.*;
+package upc.edu.ecomovil.api;
+
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 import upc.edu.ecomovil.api.reservations.domain.model.aggregates.Reservation;
