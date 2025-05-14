@@ -1,18 +1,22 @@
-ipeline {
+pipeline {
     agent any
 
     tools {
-        jdk 'JDK_21'  // Usa exactamente el nombre configurado en Jenkins
+        jdk 'JDK21'  // Usa exactamente el nombre configurado en Jenkins
     }
 
     environment {
-        // Aquí ya no es necesario usar variables relacionadas con Docker
         STAGING_ENV = 'staging'
         PROD_ENV = 'production'
     }
 
     stages {
-        
+        stage('Clonar Repositorio') {
+            steps {
+                echo 'Clonando el repositorio...'
+                git branch: 'main', url: 'https://github.com/Estrella-ticona/dise-o_backend'
+            }
+        }
 
         stage('Compilación y Construcción') {
             steps {
@@ -35,7 +39,12 @@ ipeline {
             }
         }
 
-        
+        stage('Despliegue a Staging') {
+            steps {
+                echo 'Desplegando a entorno de Staging...'
+                bat 'deploy_to_staging.bat'
+            }
+        }
 
         stage('Pruebas en Staging') {
             steps {
@@ -44,7 +53,13 @@ ipeline {
             }
         }
 
-       
+        stage('Despliegue a Producción') {
+            steps {
+                echo 'Desplegando a Producción...'
+                bat 'deploy_to_production.bat'
+            }
+        }
+
         stage('Monitoreo Post-Despliegue') {
             steps {
                 echo 'Ejecutando monitoreo post-despliegue...'
