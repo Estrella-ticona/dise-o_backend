@@ -1,0 +1,18 @@
+pipeline {
+    agent any
+    tools {
+        maven  'MAVEN399'
+    }
+
+    stages {
+        stage('build') {
+            steps {
+                withMaven(maven : 'MAVEN399') {
+                    bat 'mvn package'
+                    
+                }          
+                
+            }
+        }
+    }
+}
