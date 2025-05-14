@@ -6,7 +6,7 @@ import org.junit.Test;
 
 import upc.edu.ecomovil.api.iam.domain.model.aggregates.User;
 
-public class userTest {
+public class UserTest {
     @Test
     public void testUserUpdateUsername() {
         // Arrange

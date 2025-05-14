@@ -11,7 +11,7 @@ import java.util.List;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
-public class userTestMock {
+public class UserMockTest {
     private Role mockRole1;
     private Role mockRole2;
 

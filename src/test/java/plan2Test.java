@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import upc.edu.ecomovil.api.plan2.domain.model.aggregates.Plan2;
 
-public class plan2Test {
+public class Plan2Test {
     @Test
     public void testPlan2UpdateDetails() {
         // Arrange

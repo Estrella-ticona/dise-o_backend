@@ -7,7 +7,7 @@ import upc.edu.ecomovil.api.reservations.domain.model.commands.CreateReservation
 import upc.edu.ecomovil.api.user.domain.model.aggregates.Profile;
 import upc.edu.ecomovil.api.vehicles.domain.model.aggregates.Vehicle;
 
-public class reservationTestMock {
+public class ReservationMockTest {
     @Test
     public void testConstructorWithCreateReservationCommand() {
         // Arrange

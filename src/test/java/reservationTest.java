@@ -6,7 +6,7 @@ import upc.edu.ecomovil.api.reservations.domain.model.aggregates.Reservation;
 import upc.edu.ecomovil.api.user.domain.model.aggregates.Profile;
 import upc.edu.ecomovil.api.vehicles.domain.model.aggregates.Vehicle;
 
-public class reservationTest {
+public class ReservationTest {
 
     @Test
     public void testReservationUpdateStatus() {

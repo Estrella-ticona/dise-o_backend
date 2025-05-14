@@ -4,7 +4,7 @@ import org.junit.Test;
 import upc.edu.ecomovil.api.iam.domain.model.aggregates.User;
 import upc.edu.ecomovil.api.user.domain.model.aggregates.Profile;
 
-public class profileTest {
+public class ProfileTest {
     @Test
     public void testProfileUpdateEmail() {
         // Arrange

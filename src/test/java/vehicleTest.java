@@ -4,7 +4,7 @@ import org.junit.Test;
 
 import upc.edu.ecomovil.api.vehicles.domain.model.aggregates.Vehicle;
 
-public class vehicleTest {
+public class VehicleTest {
         @Test
         public void testVehicleUpdateDetails() {
                 // Arrange
