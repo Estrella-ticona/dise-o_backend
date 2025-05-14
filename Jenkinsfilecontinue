@@ -1,86 +1,67 @@
-pipeline {
+ipeline {
     agent any
 
     tools {
-        maven 'MAVEN399'
-        jdk 'JDK21'
+        jdk 'JDK_21'  // Usa exactamente el nombre configurado en Jenkins
     }
 
     environment {
-        DOCKER_IMAGE = 'ecovimil/app'
+        // Aquí ya no es necesario usar variables relacionadas con Docker
+        STAGING_ENV = 'staging'
+        PROD_ENV = 'production'
     }
 
     stages {
-        stage('Compile Stage') {
+        
+
+        stage('Compilación y Construcción') {
             steps {
-                withMaven(maven: 'MAVEN399') {
-                    bat 'mvn clean compile'
-                }
+                echo 'Compilando el proyecto con Maven...'
+                bat 'mvn clean install'
             }
         }
 
-        stage('Testing Stage') {
+        stage('Pruebas Unitarias') {
             steps {
-                withMaven(maven: 'MAVEN399') {
-                    bat 'mvn test'
-                }
+                echo 'Ejecutando pruebas unitarias...'
+                bat 'mvn test'
             }
         }
 
-        stage('Package Stage') {
+        stage('Pruebas de Integración') {
             steps {
-                withMaven(maven: 'MAVEN399') {
-                    bat 'mvn package'
-                }
+                echo 'Ejecutando pruebas de integración...'
+                bat 'run_integration_tests.bat'
             }
         }
 
-        stage('Integration Tests') {
+        
+
+        stage('Pruebas en Staging') {
             steps {
-                bat 'run_integration_tests.bat' // o reemplazar con comandos reales si no existe
+                echo 'Ejecutando pruebas en el entorno de Staging...'
+                bat 'run_staging_tests.bat'
             }
         }
 
-        stage('Docker Build') {
+       
+        stage('Monitoreo Post-Despliegue') {
             steps {
-                bat 'docker build -t %DOCKER_IMAGE%:%BUILD_NUMBER% .'
-            }
-        }
-
-        stage('Deploy to Staging') {
-            steps {
-                bat '''
-                    docker stop eco-movil-staging || exit 0
-                    docker rm eco-movil-staging || exit 0
-                    docker run -d --name eco-movil-staging -p 8081:8080 %DOCKER_IMAGE%:%BUILD_NUMBER%
-                '''
-            }
-        }
-
-        // Puedes agregar una etapa de pruebas en Staging aquí si lo deseas
-
-        stage('Deploy to Production') {
-            when {
-                branch 'main'
-            }
-            steps {
-                bat '''
-                    docker tag %DOCKER_IMAGE%:%BUILD_NUMBER% %DOCKER_IMAGE%:latest
-                    docker push %DOCKER_IMAGE%:latest
-                    docker stop eco-movil-prod || exit 0
-                    docker rm eco-movil-prod || exit 0
-                    docker run -d --name eco-movil-prod -p 80:8080 %DOCKER_IMAGE%:latest
-                '''
+                echo 'Ejecutando monitoreo post-despliegue...'
+                bat 'monitor_production.bat'
             }
         }
     }
 
     post {
+        always {
+            echo 'El pipeline ha finalizado.'
+        }
         success {
-            echo "Despliegue exitoso del build #${env.BUILD_NUMBER}"
+            echo '¡El despliegue fue exitoso!'
         }
         failure {
-            echo "El despliegue falló en el build #${env.BUILD_NUMBER}"
+            echo 'Hubo un error en el despliegue.'
         }
     }
 }
